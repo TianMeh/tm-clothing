@@ -29,11 +29,10 @@ const Home = () => {
       imageUrl: "https://i.ibb.co/R70vBrQ/men.png",
     },
   ];
-
   return (
     <div>
       <Outlet />
-      <Directory categories={categories} />
+      <Directory categories={categories}/>
     </div>
   );
 };
