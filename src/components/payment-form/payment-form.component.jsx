@@ -7,7 +7,11 @@ import { selectCurrentUser } from "../../store/user/user.selector";
 
 import { BUTTON_TYPE_CLASSES } from "../button/button.component";
 
-import { FormContainer, PaymentFormContainer, PaymentButton } from "./payment-form.styles";
+import {
+  FormContainer,
+  PaymentFormContainer,
+  PaymentButton,
+} from "./payment-form.styles";
 
 export const PaymentForm = () => {
   const stripe = useStripe();
@@ -22,6 +26,11 @@ export const PaymentForm = () => {
     e.preventDefault();
 
     if (!stripe || !elements) {
+      return;
+    }
+
+    if (amount == 0) {
+      alert("Please add some products to continue");
       return;
     }
 
@@ -47,7 +56,7 @@ export const PaymentForm = () => {
         },
       },
     });
-    
+
     setIsProcessingPayment(false);
 
     if (paymentResult.error) {

@@ -112,7 +112,6 @@ export function* onSignUpSuccess() {
 }
 
 export function* onSignOutStart() {
-  console.log("listened")
   yield takeLatest(USER_ACTION_TYPES.SIGN_OUT_START, signOut);
 }
 
