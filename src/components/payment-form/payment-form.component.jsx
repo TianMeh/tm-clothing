@@ -63,7 +63,7 @@ export const PaymentForm = () => {
       alert(paymentResult.error.message);
     } else {
       if (paymentResult.paymentIntent.status === "succeeded") {
-        alert(paymentResult.paymentIntent.status);
+        alert("payment " + paymentResult.paymentIntent.status);
       }
     }
   };
