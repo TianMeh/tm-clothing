@@ -41,30 +41,9 @@ const SignInForm = () => {
       dispatch(emailSignInStart(email, password));
       resetFormFields();
     } catch (error) {
-      switch ((error as AuthError).code) {
-        case AuthErrorCodes.INVALID_PASSWORD:
-          alert("Incorrect password.");
-          break;
-        case AuthErrorCodes.USER_DELETED:
-          alert("No user with this email.");
-          break;
-        default:
-          console.log((error as AuthError).code);
-      }
+      alert("something went wrong");
     }
   };
-
-  // } catch (error) {
-  //   switch (error.code) {
-  //     case "auth/wrong-password":
-  //       alert("Incorrect password");
-  //       break;
-  //     case "auth/user-not-found":
-  //       alert("no user with this email");
-  //       break;
-  //     default:
-  //       console.log(error);
-  //   }
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
