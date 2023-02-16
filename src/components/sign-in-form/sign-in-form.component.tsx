@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
+
+import { AuthError, AuthErrorCodes } from "firebase/auth";
 
 import FormInput from "../form-input/form-input.component";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
-
 
 import {
   SignInContainer,
   SignInSubtitle,
   ButtonsContainer,
-} from "./sign-in-form.styles.jsx";
-import { googleSignInStart, emailSignInStart } from "../../store/user/user.action";
+} from "./sign-in-form.styles";
+import {
+  googleSignInStart,
+  emailSignInStart,
+} from "../../store/user/user.action";
 
 const defaultFormFields = {
   email: "",
@@ -30,27 +34,39 @@ const SignInForm = () => {
     dispatch(googleSignInStart());
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
-      dispatch(emailSignInStart(email, password))
+      dispatch(emailSignInStart(email, password));
       resetFormFields();
     } catch (error) {
-      switch (error.code) {
-        case "auth/wrong-password":
-          alert("Incorrect password");
+      switch ((error as AuthError).code) {
+        case AuthErrorCodes.INVALID_PASSWORD:
+          alert("Incorrect password.");
           break;
-        case "auth/user-not-found":
-          alert("no user with this email");
+        case AuthErrorCodes.USER_DELETED:
+          alert("No user with this email.");
           break;
         default:
-          console.log(error);
+          console.log((error as AuthError).code);
       }
     }
   };
 
-  const handleChange = (event) => {
+  // } catch (error) {
+  //   switch (error.code) {
+  //     case "auth/wrong-password":
+  //       alert("Incorrect password");
+  //       break;
+  //     case "auth/user-not-found":
+  //       alert("no user with this email");
+  //       break;
+  //     default:
+  //       console.log(error);
+  //   }
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
     setFormFields({ ...formFields, [name]: value });
@@ -63,7 +79,7 @@ const SignInForm = () => {
       <form onSubmit={handleSubmit}>
         <FormInput
           label="Email"
-          tyoe="email"
+          type="email"
           required
           onChange={handleChange}
           name="email"
