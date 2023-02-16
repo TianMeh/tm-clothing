@@ -25,6 +25,8 @@ import {
   AdditionalInformaiton,
 } from "../../utils/firebase/firebase.utils";
 
+import { AuthError, AuthErrorCodes } from "firebase/auth";
+
 export function* getSnapshotFromUserAuth(
   userAuth: User,
   additionalDetails?: AdditionalInformaiton
@@ -70,6 +72,16 @@ export function* signInWithEmail({
       yield* call(getSnapshotFromUserAuth, user);
     }
   } catch (error) {
+    switch ((error as AuthError).code) {
+      case AuthErrorCodes.INVALID_PASSWORD:
+        alert("Incorrect password.");
+        break;
+      case AuthErrorCodes.USER_DELETED:
+        alert("No user with this email.");
+        break;
+      default:
+        console.log((error as AuthError).code);
+    }
     yield* put(signInFailed(error as Error));
   }
 }
